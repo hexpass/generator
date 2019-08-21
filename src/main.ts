@@ -4,7 +4,7 @@ import VueClipboard from 'vue-clipboard2';
 import App from './App.vue';
 import './registerServiceWorker';
 import '@mdi/font/css/materialdesignicons.css';
-import 'buefy/dist/buefy.css';
+import './style/custom_bulma.scss';
 
 Vue.config.productionTip = false;
 

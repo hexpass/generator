@@ -13,7 +13,7 @@
           <div class="card-header" role="button" aria-controls="advanced">
             <p class="card-header-title">高级</p>
             <a class="card-header-icon">
-              <b-icon :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
+              <b-icon type="is-primary" :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
             </a>
           </div>
         </template>
@@ -41,7 +41,6 @@
         <b-button
           type="is-primary"
           class="is-centered"
-          outlined
           @click="generate"
           v-clipboard:copy="password"
           v-clipboard:success="onCopySuccess"
@@ -80,7 +79,7 @@ export default class App extends Vue {
 
   public onCopySuccess() {
     this.$buefy.toast.open({
-      duration: 1000,
+      duration: 800,
       message: '已复制到剪切板',
       position: 'is-bottom',
       type: 'is-success',
@@ -92,7 +91,7 @@ export default class App extends Vue {
       duration: 3000,
       message: '自动复制失败，请手动复制',
       position: 'is-bottom',
-      type: 'is-warning',
+      type: 'is-danger',
     });
   }
 }
