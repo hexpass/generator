@@ -3,10 +3,16 @@
     <GithubCorner url="https://github.com/Petrichor/HexPass" />
     <div class="column is-4 is-offset-4">
       <b-field label="标签">
-        <b-input v-model="tag" />
+        <b-input icon="tag" v-model="tag" @input="verify" />
       </b-field>
       <b-field label="密码">
-        <b-input type="password" v-model="pwd" password-reveal />
+        <b-input
+          type="password"
+          icon="textbox-password"
+          password-reveal
+          v-model="pwd"
+          @input="verify"
+        />
       </b-field>
       <b-collapse :open="false" class="card" aria-id="advanced">
         <template #trigger="triggerStatus">
@@ -24,13 +30,13 @@
           </b-field>
           <label class="label is-small">字符</label>
           <b-field>
-            <b-checkbox native-value="lowerCase" :value="true" v-model="characters">a-z</b-checkbox>
+            <b-checkbox native-value="lowerCase" v-model="characters">a-z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="upperCase" :value="true" v-model="characters">A-Z</b-checkbox>
+            <b-checkbox native-value="upperCase" v-model="characters">A-Z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="number" :value="true" v-model="characters">0-9</b-checkbox>
+            <b-checkbox native-value="number" v-model="characters">0-9</b-checkbox>
           </b-field>
           <b-field>
             <b-checkbox native-value="symbol" v-model="characters">!@#$%^*&amp;</b-checkbox>
@@ -41,13 +47,14 @@
         <b-button
           type="is-primary"
           class="is-centered"
+          :disabled="btnDisabled"
           @click="generate"
           v-clipboard:copy="password"
           v-clipboard:success="onCopySuccess"
           v-clipboard:error="onCopyError"
         >生成</b-button>
       </div>
-      <b-message>
+      <b-message v-if="passwordSuccess">
         <nav class="level column">
           <p class="level-item title wrap-p">
             <strong>{{password}}</strong>
@@ -67,17 +74,33 @@ import GithubCorner from './components/GithubCorner.vue';
   },
 })
 export default class App extends Vue {
-  public tag: string = '';
-  public pwd: string = '';
-  public length: number = 10;
-  public characters: string[] = [];
-  public password: string = '';
+  private tag: string = '';
+  private pwd: string = '';
+  private length: number = 10;
+  private characters: string[] = ['lowerCase', 'upperCase', 'number'];
+  private password: string = '';
+  private btnDisabled: boolean = true;
+  private passwordSuccess: boolean = false;
 
-  public generate() {
-    this.password = md5('123');
+  private verify() {
+    if (
+      this.tag.length !== 0 &&
+      this.pwd.length !== 0 &&
+      this.characters.length
+    ) {
+      this.btnDisabled = false;
+    } else {
+      this.btnDisabled = true;
+      this.passwordSuccess = false;
+    }
   }
 
-  public onCopySuccess() {
+  private generate() {
+    this.password = md5('123');
+    this.passwordSuccess = true;
+  }
+
+  private onCopySuccess() {
     this.$buefy.toast.open({
       duration: 800,
       message: '已复制到剪切板',
@@ -86,7 +109,7 @@ export default class App extends Vue {
     });
   }
 
-  public onCopyError() {
+  private onCopyError() {
     this.$buefy.toast.open({
       duration: 3000,
       message: '自动复制失败，请手动复制',
