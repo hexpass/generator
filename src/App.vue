@@ -38,7 +38,15 @@
         </div>
       </b-collapse>
       <div class="generate-btn">
-        <b-button type="is-success" class="is-centered" outlined @click="generate">生成</b-button>
+        <b-button
+          type="is-primary"
+          class="is-centered"
+          outlined
+          @click="generate"
+          v-clipboard:copy="password"
+          v-clipboard:success="onCopySuccess"
+          v-clipboard:error="onCopyError"
+        >生成</b-button>
       </div>
       <b-message>
         <nav class="level column">
@@ -68,11 +76,23 @@ export default class App extends Vue {
 
   public generate() {
     this.password = md5('123');
+  }
+
+  public onCopySuccess() {
     this.$buefy.toast.open({
       duration: 1000,
-      message: '已经复制到剪切板',
+      message: '已复制到剪切板',
       position: 'is-bottom',
       type: 'is-success',
+    });
+  }
+
+  public onCopyError() {
+    this.$buefy.toast.open({
+      duration: 3000,
+      message: '自动复制失败，请手动复制',
+      position: 'is-bottom',
+      type: 'is-warning',
     });
   }
 }
