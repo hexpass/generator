@@ -3,12 +3,12 @@
     <GithubCorner url="https://github.com/Petrichor/HexPass" />
     <div class="column is-4 is-offset-4">
       <b-field label="标签">
-        <b-input />
+        <b-input v-model="tag" />
       </b-field>
       <b-field label="密码">
-        <b-input type="password" password-reveal />
+        <b-input type="password" v-model="pwd" password-reveal />
       </b-field>
-      <b-collapse class="card" aria-id="advanced">
+      <b-collapse :open="false" class="card" aria-id="advanced">
         <template #trigger="triggerStatus">
           <div class="card-header" role="button" aria-controls="advanced">
             <p class="card-header-title">高级</p>
@@ -20,20 +20,20 @@
         <div class="card-content">
           <label class="label is-small">长度</label>
           <b-field>
-            <b-slider :min="4" :max="32" :value="10" rounded />
+            <b-slider :min="4" :max="32" v-model="length" rounded />
           </b-field>
           <label class="label is-small">字符</label>
           <b-field>
-            <b-checkbox :value="true">a-z</b-checkbox>
+            <b-checkbox native-value="lowerCase" :value="true" v-model="characters">a-z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox :value="true">A-Z</b-checkbox>
+            <b-checkbox native-value="upperCase" :value="true" v-model="characters">A-Z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox :value="true">0-9</b-checkbox>
+            <b-checkbox native-value="number" :value="true" v-model="characters">0-9</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox>!@#$%^*&amp;</b-checkbox>
+            <b-checkbox native-value="symbol" v-model="characters">!@#$%^*&amp;</b-checkbox>
           </b-field>
         </div>
       </b-collapse>
@@ -43,7 +43,7 @@
       <b-message>
         <nav class="level column">
           <p class="level-item title wrap-p">
-            <strong>1234dsfs1234dsfs1234dsfs1234dsfs</strong>
+            <strong>{{password}}</strong>
           </p>
         </nav>
       </b-message>
@@ -52,6 +52,7 @@
 </template>
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
+import md5 from 'js-md5';
 import GithubCorner from './components/GithubCorner.vue';
 @Component({
   components: {
@@ -59,9 +60,16 @@ import GithubCorner from './components/GithubCorner.vue';
   },
 })
 export default class App extends Vue {
+  public tag: string = '';
+  public pwd: string = '';
+  public length: number = 10;
+  public characters: string[] = [];
+  public password: string = '';
+
   public generate() {
+    this.password = md5('123');
     this.$buefy.toast.open({
-      duration: 5000,
+      duration: 1000,
       message: '已经复制到剪切板',
       position: 'is-bottom',
       type: 'is-success',
