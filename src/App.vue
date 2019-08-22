@@ -30,16 +30,19 @@
           </b-field>
           <label class="label is-small">字符</label>
           <b-field>
-            <b-checkbox native-value="lowerCase" v-model="characters">a-z</b-checkbox>
+            <b-checkbox native-value="lowerCase" v-model="characters" @input="verify">a-z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="upperCase" v-model="characters">A-Z</b-checkbox>
+            <b-checkbox native-value="upperCase" v-model="characters" @input="verify">A-Z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="number" v-model="characters">0-9</b-checkbox>
+            <b-checkbox native-value="number" v-model="characters" @input="verify">0-9</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="symbol" v-model="characters">!@#$%^*&amp;</b-checkbox>
+            <b-checkbox native-value="symbol" v-model="characters" @input="verify">!@#$%^*&amp;</b-checkbox>
+          </b-field>
+          <b-field>
+            <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
           </b-field>
         </div>
       </b-collapse>
@@ -81,6 +84,11 @@ export default class App extends Vue {
   private password: string = '';
   private btnDisabled: boolean = true;
   private passwordSuccess: boolean = false;
+  private avoidAmbChar: boolean = true;
+  private symbolNum: number = 0;
+  private numberNum: number = 0;
+  private upperCaseNum: number = 0;
+  private lowerCaseNum: number = 0;
 
   private verify() {
     if (
@@ -96,8 +104,47 @@ export default class App extends Vue {
   }
 
   private generate() {
-    this.password = md5('123');
+    const tagMd5: string = md5(this.tag);
+    const pwdMd5: string = md5(this.pwd);
+    const tagAndPwdMd5: string = md5(tagMd5 + pwdMd5);
+    this.getCharactersNum();
+    this.password = tagAndPwdMd5;
     this.passwordSuccess = true;
+  }
+
+  private getCharactersNum() {
+    if (this.characters.includes('symbol')) {
+      this.symbolNum = Math.floor(this.length / this.characters.length);
+      console.log(`特殊字符: ${this.symbolNum}`);
+    }
+    if (this.characters.includes('number')) {
+      if (
+        !(
+          this.characters.includes('upperCase') ||
+          this.characters.includes('lowerCase')
+        )
+      ) {
+        this.numberNum = this.length - this.symbolNum;
+      } else {
+        this.numberNum = Math.floor(this.length / this.characters.length);
+      }
+      console.log(`数字: ${this.numberNum}`);
+    }
+    if (this.characters.includes('upperCase')) {
+      if (!this.characters.includes('lowerCase')) {
+        this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
+      } else {
+        this.upperCaseNum = Math.floor(
+          (this.length - this.symbolNum - this.numberNum) / 2,
+        );
+      }
+      console.log(`大写字母: ${this.upperCaseNum}`);
+    }
+    if (this.characters.includes('lowerCase')) {
+      this.lowerCaseNum =
+        this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
+      console.log(`小写字母: ${this.lowerCaseNum}`);
+    }
   }
 
   private onCopySuccess() {
