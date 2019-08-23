@@ -15,6 +15,8 @@ module.exports = {
     'lines-between-class-members': ["error", "always", { exceptAfterSingleLine: true }],
     'operator-linebreak': ["error", "after"],
     'arrow-parens': 'off',
+    'eqeqeq': 'off',
+    'no-plusplus': 'off',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',

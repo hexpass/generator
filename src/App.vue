@@ -30,16 +30,16 @@
           </b-field>
           <label class="label is-small">字符</label>
           <b-field>
-            <b-checkbox v-model="hasLowerCase" @input="verify">a-z</b-checkbox>
+            <b-checkbox v-model="hasLowerCase" @input="verify">小写字母</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox v-model="hasUpperCase" @input="verify">A-Z</b-checkbox>
+            <b-checkbox v-model="hasUpperCase" @input="verify">大写字母</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox v-model="hasNumber" @input="verify">0-9</b-checkbox>
+            <b-checkbox v-model="hasNumber" @input="verify">数字</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox v-model="hasSymbol" @input="verify">!@#$%^*&amp;</b-checkbox>
+            <b-checkbox v-model="hasSymbol" @input="verify">符号</b-checkbox>
           </b-field>
           <b-field>
             <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
@@ -86,13 +86,21 @@ export default class App extends Vue {
   private hasLowerCase: boolean = true;
   private characterTypeNum: number = 3;
   private password: string = '';
-  private btnDisabled: boolean = true;
+  private btnDisabled: boolean = false;
   private passwordSuccess: boolean = false;
-  private avoidAmbChar: boolean = true;
+  private avoidAmbChar: boolean = false;
+  private symbolNum: number = 0;
+  private numberNum: number = 0;
+  private upperCaseNum: number = 0;
+  private lowerCaseNum: number = 0;
+  private symbolCharsArray: string[] = [];
+  private numberCharsArray: string[] = [];
+  private upperCaseCharsArray: string[] = [];
+  private lowerCaseCharsArray: string[] = [];
 
   private verify() {
     this.characterTypeNum = this.getCharacterTypeNum();
-    if (this.tag.length !== 0 && this.pwd.length !== 0 && this.characterTypeNum !== 0) {
+    if (this.tag.length != 0 && this.pwd.length != 0 && this.characterTypeNum != 0) {
       this.btnDisabled = false;
     } else {
       this.btnDisabled = true;
@@ -108,14 +116,49 @@ export default class App extends Vue {
     const passwordArray: string[] = new Array(this.length);
 
     this.getEachTypeCharsNum();
+    this.initChars();
+
     passwordMd5Array.forEach((value, index) => {
       const itemInt: number = parseInt(value, 16);
-      for (let i = 0; i < passwordArray.length; i += 1) {
-        console.log(1);
+      let char: string = '';
+      let cursor: number = 0;
+      for (let i = 0; i <= itemInt; i++) {
+        if (passwordArray[cursor] != undefined) {
+          i--;
+        }
+        if (i != itemInt) {
+          cursor = cursor == this.length - 1 ? 0 : cursor + 1;
+        }
       }
+
+      if (index < this.symbolNum) {
+        char = App.getChar(this.symbolCharsArray, itemInt);
+      } else if (index < this.numberNum) {
+        char = App.getChar(this.numberCharsArray, itemInt);
+      } else if (index < this.upperCaseNum) {
+        char = App.getChar(this.upperCaseCharsArray, itemInt);
+      } else {
+        char = App.getChar(this.lowerCaseCharsArray, itemInt);
+      }
+      passwordArray[index] = char;
     });
-    // this.password = tagAndPwdMd5;
+
+    this.password = passwordArray.join('');
     this.passwordSuccess = true;
+  }
+
+  private initChars() {
+    if (this.avoidAmbChar) {
+      this.symbolCharsArray = '@#$%^&*+-'.split('');
+      this.numberCharsArray = '23456789'.split('');
+      this.upperCaseCharsArray = 'ABDEFGHJLMNQRTY'.split('');
+      this.lowerCaseCharsArray = 'abdefghjmnqrty'.split('');
+    } else {
+      this.symbolCharsArray = '!@#$%^&*+-'.split('');
+      this.numberCharsArray = '0123456789'.split('');
+      this.upperCaseCharsArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      this.lowerCaseCharsArray = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    }
   }
 
   private getCharacterTypeNum(): number {
@@ -124,31 +167,33 @@ export default class App extends Vue {
   }
 
   private getEachTypeCharsNum() {
-    let symbolNum: number = 0;
-    let numberNum: number = 0;
-    let upperCaseNum: number = 0;
-    let lowerCaseNum: number = 0;
-
     if (this.hasSymbol) {
-      symbolNum = Math.floor(this.length / this.characterTypeNum);
+      this.symbolNum = Math.floor(this.length / this.characterTypeNum);
     }
     if (this.hasNumber) {
       if (!(this.hasUpperCase || this.hasLowerCase)) {
-        numberNum = this.length - symbolNum;
+        this.numberNum = this.length - this.symbolNum;
       } else {
-        numberNum = Math.floor(this.length / this.characterTypeNum);
+        this.numberNum = Math.floor(this.length / this.characterTypeNum);
       }
     }
     if (this.hasUpperCase) {
       if (!this.hasLowerCase) {
-        upperCaseNum = this.length - symbolNum - numberNum;
+        this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
       } else {
-        upperCaseNum = Math.floor((this.length - symbolNum - numberNum) / 2);
+        this.upperCaseNum = Math.floor((this.length - this.symbolNum - this.numberNum) / 2);
       }
     }
     if (this.hasLowerCase) {
-      lowerCaseNum = this.length - symbolNum - numberNum - upperCaseNum;
+      this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
     }
+  }
+
+  public static getChar(charsArray: string[], index: number): string {
+    if (index < charsArray.length) {
+      return charsArray[index];
+    }
+    return charsArray[index % charsArray.length];
   }
 
   private onCopySuccess() {
