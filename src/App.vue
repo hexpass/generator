@@ -30,16 +30,16 @@
           </b-field>
           <label class="label is-small">字符</label>
           <b-field>
-            <b-checkbox native-value="lowerCase" v-model="characters" @input="verify">a-z</b-checkbox>
+            <b-checkbox v-model="hasLowerCase" @input="verify">a-z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="upperCase" v-model="characters" @input="verify">A-Z</b-checkbox>
+            <b-checkbox v-model="hasUpperCase" @input="verify">A-Z</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="number" v-model="characters" @input="verify">0-9</b-checkbox>
+            <b-checkbox v-model="hasNumber" @input="verify">0-9</b-checkbox>
           </b-field>
           <b-field>
-            <b-checkbox native-value="symbol" v-model="characters" @input="verify">!@#$%^*&amp;</b-checkbox>
+            <b-checkbox v-model="hasSymbol" @input="verify">!@#$%^*&amp;</b-checkbox>
           </b-field>
           <b-field>
             <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
@@ -80,22 +80,19 @@ export default class App extends Vue {
   private tag: string = '';
   private pwd: string = '';
   private length: number = 10;
-  private characters: string[] = ['lowerCase', 'upperCase', 'number'];
+  private hasSymbol: boolean = false;
+  private hasNumber: boolean = true;
+  private hasUpperCase: boolean = true;
+  private hasLowerCase: boolean = true;
+  private characterTypeNum: number = 3;
   private password: string = '';
   private btnDisabled: boolean = true;
   private passwordSuccess: boolean = false;
   private avoidAmbChar: boolean = true;
-  private symbolNum: number = 0;
-  private numberNum: number = 0;
-  private upperCaseNum: number = 0;
-  private lowerCaseNum: number = 0;
 
   private verify() {
-    if (
-      this.tag.length !== 0 &&
-      this.pwd.length !== 0 &&
-      this.characters.length
-    ) {
+    this.characterTypeNum = this.getCharacterTypeNum();
+    if (this.tag.length !== 0 && this.pwd.length !== 0 && this.characterTypeNum !== 0) {
       this.btnDisabled = false;
     } else {
       this.btnDisabled = true;
@@ -106,44 +103,51 @@ export default class App extends Vue {
   private generate() {
     const tagMd5: string = md5(this.tag);
     const pwdMd5: string = md5(this.pwd);
-    const tagAndPwdMd5: string = md5(tagMd5 + pwdMd5);
-    this.getCharactersNum();
-    this.password = tagAndPwdMd5;
+    const tagAndPwdMd5Array: string[] = md5(tagMd5 + pwdMd5).split('');
+    const passwordMd5Array: string[] = tagAndPwdMd5Array.splice(0, this.length);
+    const passwordArray: string[] = new Array(this.length);
+
+    this.getEachTypeCharsNum();
+    passwordMd5Array.forEach((value, index) => {
+      const itemInt: number = parseInt(value, 16);
+      for (let i = 0; i < passwordArray.length; i += 1) {
+        console.log(1);
+      }
+    });
+    // this.password = tagAndPwdMd5;
     this.passwordSuccess = true;
   }
 
-  private getCharactersNum() {
-    if (this.characters.includes('symbol')) {
-      this.symbolNum = Math.floor(this.length / this.characters.length);
-      console.log(`特殊字符: ${this.symbolNum}`);
+  private getCharacterTypeNum(): number {
+    const characterTypes: boolean[] = [this.hasSymbol, this.hasNumber, this.hasUpperCase, this.hasLowerCase];
+    return characterTypes.reduce((total, element) => (element ? total + 1 : total), 0);
+  }
+
+  private getEachTypeCharsNum() {
+    let symbolNum: number = 0;
+    let numberNum: number = 0;
+    let upperCaseNum: number = 0;
+    let lowerCaseNum: number = 0;
+
+    if (this.hasSymbol) {
+      symbolNum = Math.floor(this.length / this.characterTypeNum);
     }
-    if (this.characters.includes('number')) {
-      if (
-        !(
-          this.characters.includes('upperCase') ||
-          this.characters.includes('lowerCase')
-        )
-      ) {
-        this.numberNum = this.length - this.symbolNum;
+    if (this.hasNumber) {
+      if (!(this.hasUpperCase || this.hasLowerCase)) {
+        numberNum = this.length - symbolNum;
       } else {
-        this.numberNum = Math.floor(this.length / this.characters.length);
+        numberNum = Math.floor(this.length / this.characterTypeNum);
       }
-      console.log(`数字: ${this.numberNum}`);
     }
-    if (this.characters.includes('upperCase')) {
-      if (!this.characters.includes('lowerCase')) {
-        this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
+    if (this.hasUpperCase) {
+      if (!this.hasLowerCase) {
+        upperCaseNum = this.length - symbolNum - numberNum;
       } else {
-        this.upperCaseNum = Math.floor(
-          (this.length - this.symbolNum - this.numberNum) / 2,
-        );
+        upperCaseNum = Math.floor((this.length - symbolNum - numberNum) / 2);
       }
-      console.log(`大写字母: ${this.upperCaseNum}`);
     }
-    if (this.characters.includes('lowerCase')) {
-      this.lowerCaseNum =
-        this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
-      console.log(`小写字母: ${this.lowerCaseNum}`);
+    if (this.hasLowerCase) {
+      lowerCaseNum = this.length - symbolNum - numberNum - upperCaseNum;
     }
   }
 
