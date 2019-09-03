@@ -68,9 +68,9 @@
             v-clipboard:error="onCopyError"
           >生成</b-button>
         </div>
-        <b-message v-if="passwordSuccess">
+        <b-message v-show="passwordSuccess">
           <nav class="level column">
-            <p class="level-item title wrap-p">
+            <p class="level-item title wrap-p" ref="passwordText">
               <strong>{{password}}</strong>
             </p>
           </nav>
@@ -208,6 +208,16 @@ export default class App extends Vue {
     return charsArray[index % charsArray.length];
   }
 
+  public static selectText(element: Element) {
+    const range = document.createRange();
+    range.selectNode(element);
+    const selection: Selection | null = window.getSelection();
+    if (selection != null) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
   private onCopySuccess() {
     this.$buefy.toast.open({
       duration: 800,
@@ -218,6 +228,7 @@ export default class App extends Vue {
   }
 
   private onCopyError() {
+    App.selectText(this.$refs.passwordText as Element);
     this.$buefy.toast.open({
       duration: 3000,
       message: '自动复制失败，请手动复制',
