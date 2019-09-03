@@ -1,69 +1,81 @@
 <template>
   <div class="app">
-    <GithubCorner url="https://github.com/Petrichor/HexPass" />
-    <div class="column is-4 is-offset-4">
-      <b-field label="标签">
-        <b-input icon="tag" v-model="tag" @input="verify" />
-      </b-field>
-      <b-field label="密码">
-        <b-input
-          type="password"
-          icon="textbox-password"
-          password-reveal
-          v-model="pwd"
-          @input="verify"
-        />
-      </b-field>
-      <b-collapse :open="false" class="card" aria-id="advanced">
-        <template #trigger="triggerStatus">
-          <div class="card-header" role="button" aria-controls="advanced">
-            <p class="card-header-title">高级</p>
-            <a class="card-header-icon">
-              <b-icon type="is-primary" :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
-            </a>
-          </div>
-        </template>
-        <div class="card-content">
-          <label class="label is-small">长度</label>
-          <b-field>
-            <b-slider :min="4" :max="32" v-model="length" rounded />
-          </b-field>
-          <label class="label is-small">字符</label>
-          <b-field>
-            <b-checkbox v-model="hasLowerCase" @input="verify">小写字母</b-checkbox>
-          </b-field>
-          <b-field>
-            <b-checkbox v-model="hasUpperCase" @input="verify">大写字母</b-checkbox>
-          </b-field>
-          <b-field>
-            <b-checkbox v-model="hasNumber" @input="verify">数字</b-checkbox>
-          </b-field>
-          <b-field>
-            <b-checkbox v-model="hasSymbol" @input="verify">符号</b-checkbox>
-          </b-field>
-          <b-field>
-            <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
-          </b-field>
-        </div>
-      </b-collapse>
-      <div class="generate-btn">
-        <b-button
-          type="is-primary"
-          class="is-centered"
-          :disabled="btnDisabled"
-          @click="generate"
-          v-clipboard:copy="password"
-          v-clipboard:success="onCopySuccess"
-          v-clipboard:error="onCopyError"
-        >生成</b-button>
+    <div class="columns is-mobile is-gapless">
+      <div class="column is-one-third">
+        <b-button type="is-light" class="setting-btn" icon-right="settings" />
       </div>
-      <b-message v-if="passwordSuccess">
-        <nav class="level column">
-          <p class="level-item title wrap-p">
-            <strong>{{password}}</strong>
-          </p>
-        </nav>
-      </b-message>
+      <div class="column is-one-third">
+        <img alt="Vue logo" src="./assets/logo.png" />
+      </div>
+      <div class="column is-one-third">
+        <GithubCorner url="https://github.com/Petrichor/HexPass" />
+      </div>
+    </div>
+    <div class="columns is-centered is-gapless app-body">
+      <div class="column is-one-third">
+        <b-field label="标签">
+          <b-input icon="tag" v-model="tag" @input="verify" />
+        </b-field>
+        <b-field label="密码">
+          <b-input
+            type="password"
+            icon="textbox-password"
+            password-reveal
+            v-model="pwd"
+            @input="verify"
+          />
+        </b-field>
+        <b-collapse :open="false" class="card" aria-id="advanced">
+          <template #trigger="triggerStatus">
+            <div class="card-header" role="button" aria-controls="advanced">
+              <p class="card-header-title">高级</p>
+              <a class="card-header-icon">
+                <b-icon type="is-primary" :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
+              </a>
+            </div>
+          </template>
+          <div class="card-content">
+            <label class="label is-small">长度</label>
+            <b-field>
+              <b-slider :min="4" :max="32" v-model="length" rounded />
+            </b-field>
+            <label class="label is-small">字符</label>
+            <b-field>
+              <b-checkbox v-model="hasLowerCase" @input="verify">小写字母</b-checkbox>
+            </b-field>
+            <b-field>
+              <b-checkbox v-model="hasUpperCase" @input="verify">大写字母</b-checkbox>
+            </b-field>
+            <b-field>
+              <b-checkbox v-model="hasNumber" @input="verify">数字</b-checkbox>
+            </b-field>
+            <b-field>
+              <b-checkbox v-model="hasSymbol" @input="verify">符号</b-checkbox>
+            </b-field>
+            <b-field>
+              <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
+            </b-field>
+          </div>
+        </b-collapse>
+        <div class="generate-btn">
+          <b-button
+            type="is-primary"
+            class="is-centered"
+            :disabled="btnDisabled"
+            @click="generate"
+            v-clipboard:copy="password"
+            v-clipboard:success="onCopySuccess"
+            v-clipboard:error="onCopyError"
+          >生成</b-button>
+        </div>
+        <b-message v-if="passwordSuccess">
+          <nav class="level column">
+            <p class="level-item title wrap-p">
+              <strong>{{password}}</strong>
+            </p>
+          </nav>
+        </b-message>
+      </div>
     </div>
   </div>
 </template>
@@ -86,7 +98,7 @@ export default class App extends Vue {
   private hasLowerCase: boolean = true;
   private characterTypeNum: number = 3;
   private password: string = '';
-  private btnDisabled: boolean = false;
+  private btnDisabled: boolean = true;
   private passwordSuccess: boolean = false;
   private avoidAmbChar: boolean = false;
   private symbolNum: number = 0;
@@ -216,6 +228,12 @@ export default class App extends Vue {
 }
 </script>
 <style>
+.setting-btn {
+  margin: 0.75rem;
+}
+.app-body {
+  padding: 0.75rem;
+}
 .generate-btn {
   display: flex;
   justify-content: center;
