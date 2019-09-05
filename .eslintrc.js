@@ -17,6 +17,7 @@ module.exports = {
     'arrow-parens': 'off',
     'eqeqeq': 'off',
     'no-plusplus': 'off',
+    'object-curly-newline': 'off',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
