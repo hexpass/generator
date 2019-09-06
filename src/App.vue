@@ -267,6 +267,10 @@ export default class App extends Vue {
   mounted() {
     window.addEventListener('popstate', this.goBack);
   }
+
+  beforeDestroy() {
+    window.removeEventListener('popstate', this.goBack);
+  }
 }
 </script>
 <style>

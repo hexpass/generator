@@ -1,12 +1,12 @@
 <template>
   <transition name="fade">
-    <div class="modal is-active" v-if="active">
-      <div class="modal-background" @click="backdropClose" />
+    <div class="modal is-active" v-if="active" @keyup.enter="closeModal">
+      <div class="modal-background" @click="closeModal" />
       <transition name="fadeLeft">
         <div class="modal-card full-screen">
           <header class="modal-card-head">
             <p class="modal-card-title">设置</p>
-            <span class="delete" @click="backdropClose" />
+            <span class="delete" @click="closeModal" />
           </header>
           <section class="modal-card-body">
             <p>
@@ -27,7 +27,7 @@ export default class SettingsModal extends Vue {
   @Prop() private active!: boolean;
   @Prop() private fullScreen!: boolean;
 
-  private backdropClose() {
+  private closeModal() {
     window.history.back();
     window.history.replaceState(null, '', '/');
     this.$emit('update:active', false);
@@ -36,6 +36,21 @@ export default class SettingsModal extends Vue {
   @Watch('fullScreen') Modal(isFullScreen: boolean): void {
     this.fullScreen = isFullScreen;
     console.log(this.fullScreen);
+  }
+
+  private keyPress(event: KeyboardEvent) {
+    // Esc key
+    if (event.keyCode == 27) {
+      this.closeModal();
+    }
+  }
+
+  created() {
+    window.addEventListener('keyup', this.keyPress);
+  }
+
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.keyPress);
   }
 }
 </script>
