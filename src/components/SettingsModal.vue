@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="modal is-active" v-if="active" @keyup.enter="closeModal">
+    <div class="modal is-active" v-if="active">
       <div class="modal-background" @click="closeModal" />
       <transition name="fadeLeft">
         <div class="modal-card full-screen">
@@ -40,7 +40,7 @@ export default class SettingsModal extends Vue {
 
   private keyPress(event: KeyboardEvent) {
     // Esc key
-    if (event.keyCode == 27) {
+    if (this.active && event.keyCode == 27) {
       this.closeModal();
     }
   }
