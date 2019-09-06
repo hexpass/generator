@@ -1,9 +1,9 @@
 <template>
   <transition name="fade">
-    <div class="modal is-active" v-if="active">
+    <div class="modal is-active" v-show="active">
       <div class="modal-background" @click="closeModal" />
       <transition name="fadeLeft">
-        <div class="modal-card full-screen">
+        <div class="modal-card full-screen" v-show="active">
           <header class="modal-card-head">
             <p class="modal-card-title">设置</p>
             <span class="delete" @click="closeModal" />
@@ -73,6 +73,42 @@ export default class SettingsModal extends Vue {
 @media screen and (max-width: 768px) {
   .full-screen {
     width: 100%;
+  }
+}
+
+.fade-enter-active {
+  animation: fade 0.4s;
+}
+
+.fade-leave-active {
+  animation: fade 0.4s reverse;
+}
+
+.fadeLeft-enter-active {
+  animation: fadeLeft 0.4s;
+}
+
+.fadeLeft-leave-active {
+  animation: fadeLeft 0.4s reverse;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 </style>
