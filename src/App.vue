@@ -2,10 +2,10 @@
   <div class="app">
     <div class="columns is-mobile is-gapless">
       <div class="column is-one-third">
-        <b-dropdown v-model="language" aria-role="list">
+        <b-dropdown v-model="languageSelect" aria-role="list">
           <b-button class="language-btn" type="is-light" slot="trigger" icon-right="translate" />
-          <b-dropdown-item :value="'简体中文'" aria-role="listitem">简体中文</b-dropdown-item>
-          <b-dropdown-item :value="'繁體中文'" aria-role="listitem">繁體中文</b-dropdown-item>
+          <b-dropdown-item :value="'zh-Hans'" aria-role="listitem">简体中文</b-dropdown-item>
+          <b-dropdown-item :value="'zh-Hant'" aria-role="listitem">繁體中文</b-dropdown-item>
         </b-dropdown>
       </div>
       <div class="column is-one-third logo">
@@ -17,10 +17,10 @@
     </div>
     <div class="columns is-centered is-gapless app-body">
       <div class="column is-one-third">
-        <b-field label="标签">
+        <b-field :label="text.get('label')">
           <b-input icon="tag" v-model="tag" @input="verify" />
         </b-field>
-        <b-field label="密码">
+        <b-field :label="text.get('password')">
           <b-input
             type="password"
             icon="textbox-password"
@@ -32,14 +32,14 @@
         <b-collapse :open="false" class="card" aria-id="advanced">
           <template #trigger="triggerStatus">
             <div class="card-header" role="button" aria-controls="advanced">
-              <p class="card-header-title">高级</p>
+              <p class="card-header-title">{{text.get('advanced')}}</p>
               <a class="card-header-icon">
                 <b-icon type="is-primary" :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
               </a>
             </div>
           </template>
           <div class="card-content">
-            <label class="label is-small">长度</label>
+            <label class="label is-small">{{text.get('length')}}</label>
             <b-field>
               <b-slider :min="4" :max="32" v-model="length" rounded />
             </b-field>
@@ -84,8 +84,9 @@
   </div>
 </template>
 <script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import md5 from 'js-md5';
+import Language from './lang';
 import GithubCorner from './components/GithubCorner.vue';
 @Component({
   components: {
@@ -93,6 +94,7 @@ import GithubCorner from './components/GithubCorner.vue';
   },
 })
 export default class App extends Vue {
+  private lang: Language = new Language('zh-Hans');
   private tag: string = '';
   private pwd: string = '';
   private length: number = 10;
@@ -114,7 +116,28 @@ export default class App extends Vue {
   private upperCaseCharsArray: string[] = [];
   private lowerCaseCharsArray: string[] = [];
   private isModalActive: boolean = false;
-  private language: string = '简体中文';
+  private languageSelect: string = 'zh-Hans';
+  public text: Map<string, string> = new Map();
+
+  created() {
+    this.changeString();
+  }
+
+  @Watch('languageSelect')
+  languageChanged() {
+    this.lang.setLocale(this.languageSelect);
+    this.changeString();
+    this.$forceUpdate();
+  }
+
+  private changeString() {
+    for (const key of this.lang.hans.keys()) {
+      const value = this.lang.text.get(key);
+      if (typeof value == 'string') {
+        this.text.set(key, value);
+      }
+    }
+  }
 
   private verify() {
     this.characterTypeNum = this.getCharacterTypeNum();

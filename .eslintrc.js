@@ -18,6 +18,7 @@ module.exports = {
     'eqeqeq': 'off',
     'no-plusplus': 'off',
     'object-curly-newline': 'off',
+    'no-restricted-syntax': 'off',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
