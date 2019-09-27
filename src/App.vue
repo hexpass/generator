@@ -2,10 +2,13 @@
   <div class="app">
     <div class="columns is-mobile is-gapless">
       <div class="column is-one-third">
-        <b-button type="is-light" class="settings-btn" icon-right="settings" @click="configure" />
-        <settings-modal :active.sync="isModalActive" :fullScreen="isFullScreen" />
+        <b-dropdown v-model="language" aria-role="list">
+          <b-button class="language-btn" type="is-light" slot="trigger" icon-right="translate" />
+          <b-dropdown-item :value="'简体中文'" aria-role="listitem">简体中文</b-dropdown-item>
+          <b-dropdown-item :value="'繁體中文'" aria-role="listitem">繁體中文</b-dropdown-item>
+        </b-dropdown>
       </div>
-      <div class="column is-one-third">
+      <div class="column is-one-third logo">
         <img alt="Vue logo" src="./assets/logo.png" />
       </div>
       <div class="column is-one-third">
@@ -84,11 +87,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 import md5 from 'js-md5';
 import GithubCorner from './components/GithubCorner.vue';
-import SettingsModal from './components/SettingsModal.vue';
 @Component({
   components: {
     GithubCorner,
-    SettingsModal,
   },
 })
 export default class App extends Vue {
@@ -112,9 +113,8 @@ export default class App extends Vue {
   private numberCharsArray: string[] = [];
   private upperCaseCharsArray: string[] = [];
   private lowerCaseCharsArray: string[] = [];
-  private mobileMql = window.matchMedia('screen and (max-width: 768px)');
   private isModalActive: boolean = false;
-  private isFullScreen: boolean = false;
+  private language: string = '简体中文';
 
   private verify() {
     this.characterTypeNum = this.getCharacterTypeNum();
@@ -242,40 +242,14 @@ export default class App extends Vue {
       type: 'is-danger',
     });
   }
-
-  private onWindowWidthChange() {
-    if (this.mobileMql.matches) {
-      this.isFullScreen = true;
-    } else {
-      this.isFullScreen = false;
-    }
-  }
-
-  private configure() {
-    this.mobileMql.addListener(this.onWindowWidthChange);
-    this.onWindowWidthChange();
-    this.isModalActive = true;
-    window.history.pushState(null, '', 'settings');
-  }
-
-  private goBack(event: PopStateEvent) {
-    if (window.location.href.indexOf('settings') < 0) {
-      this.isModalActive = false;
-    }
-  }
-
-  mounted() {
-    window.addEventListener('popstate', this.goBack);
-  }
-
-  beforeDestroy() {
-    window.removeEventListener('popstate', this.goBack);
-  }
 }
 </script>
 <style>
-.settings-btn {
+.language-btn {
   margin: 0.75rem;
+}
+.logo {
+  text-align: center;
 }
 .app-body {
   padding: 0.75rem;
