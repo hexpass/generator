@@ -8,8 +8,10 @@
           <b-dropdown-item :value="'zh-Hant'" aria-role="listitem">繁體中文</b-dropdown-item>
         </b-dropdown>
       </div>
-      <div class="column is-one-third logo">
-        <img alt="Vue logo" src="./assets/logo.png" />
+      <div class="column is-one-third has-text-centered">
+        <figure class="image is-128x128 is-inline-block">
+          <img alt="HexPass logo" src="./assets/logo.png" />
+        </figure>
       </div>
       <div class="column is-one-third">
         <github-corner url="https://github.com/Petrichor/HexPass" />
@@ -141,7 +143,11 @@ export default class App extends Vue {
 
   private verify() {
     this.characterTypeNum = this.getCharacterTypeNum();
-    if (this.tag.length != 0 && this.pwd.length != 0 && this.characterTypeNum != 0) {
+    if (
+      this.tag.length != 0 &&
+      this.pwd.length != 0 &&
+      this.characterTypeNum != 0
+    ) {
       this.btnDisabled = false;
     } else {
       this.btnDisabled = true;
@@ -203,8 +209,16 @@ export default class App extends Vue {
   }
 
   private getCharacterTypeNum(): number {
-    const characterTypes: boolean[] = [this.hasSymbol, this.hasNumber, this.hasUpperCase, this.hasLowerCase];
-    return characterTypes.reduce((total, element) => (element ? total + 1 : total), 0);
+    const characterTypes: boolean[] = [
+      this.hasSymbol,
+      this.hasNumber,
+      this.hasUpperCase,
+      this.hasLowerCase,
+    ];
+    return characterTypes.reduce(
+      (total, element) => (element ? total + 1 : total),
+      0,
+    );
   }
 
   private getEachTypeCharsNum() {
@@ -222,11 +236,14 @@ export default class App extends Vue {
       if (!this.hasLowerCase) {
         this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
       } else {
-        this.upperCaseNum = Math.floor((this.length - this.symbolNum - this.numberNum) / 2);
+        this.upperCaseNum = Math.floor(
+          (this.length - this.symbolNum - this.numberNum) / 2,
+        );
       }
     }
     if (this.hasLowerCase) {
-      this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
+      this.lowerCaseNum =
+        this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
     }
   }
 
@@ -270,9 +287,6 @@ export default class App extends Vue {
 <style>
 .language-btn {
   margin: 0.75rem;
-}
-.logo {
-  text-align: center;
 }
 .app-body {
   padding: 0.75rem;
