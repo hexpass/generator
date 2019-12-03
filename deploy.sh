@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # 当发生错误时中止脚本
 set -e
@@ -14,6 +14,6 @@ git add -A
 git commit -m 'deploy'
 
 # 部署
-git push -f https://github.com/petrichor/HexPass.git master:gh-pages
+git push -f git@github.com:petrichor/HexPass.git master:gh-pages
 
 cd -
