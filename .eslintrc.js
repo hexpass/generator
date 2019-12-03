@@ -12,13 +12,14 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'max-len': 'off',
-    'lines-between-class-members': ["error", "always", { exceptAfterSingleLine: true }],
-    'operator-linebreak': ["error", "after"],
+    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+    'operator-linebreak': ['error', 'after'],
     'arrow-parens': 'off',
     'eqeqeq': 'off',
     'no-plusplus': 'off',
     'object-curly-newline': 'off',
     'no-restricted-syntax': 'off',
+    'linebreak-style': "off"
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',

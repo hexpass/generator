@@ -143,11 +143,7 @@ export default class App extends Vue {
 
   private verify() {
     this.characterTypeNum = this.getCharacterTypeNum();
-    if (
-      this.tag.length != 0 &&
-      this.pwd.length != 0 &&
-      this.characterTypeNum != 0
-    ) {
+    if (this.tag.length != 0 && this.pwd.length != 0 && this.characterTypeNum != 0) {
       this.btnDisabled = false;
     } else {
       this.btnDisabled = true;
@@ -215,10 +211,7 @@ export default class App extends Vue {
       this.hasUpperCase,
       this.hasLowerCase,
     ];
-    return characterTypes.reduce(
-      (total, element) => (element ? total + 1 : total),
-      0,
-    );
+    return characterTypes.reduce((total, element) => (element ? total + 1 : total), 0);
   }
 
   private getEachTypeCharsNum() {
@@ -236,14 +229,11 @@ export default class App extends Vue {
       if (!this.hasLowerCase) {
         this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
       } else {
-        this.upperCaseNum = Math.floor(
-          (this.length - this.symbolNum - this.numberNum) / 2,
-        );
+        this.upperCaseNum = Math.floor((this.length - this.symbolNum - this.numberNum) / 2);
       }
     }
     if (this.hasLowerCase) {
-      this.lowerCaseNum =
-        this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
+      this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
     }
   }
 
