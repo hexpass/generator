@@ -255,9 +255,10 @@ export default class App extends Vue {
   }
 
   private onCopySuccess() {
+    const copySuccessText = this.text.get('copySuccess') as string;
     this.$buefy.toast.open({
       duration: 800,
-      message: '已复制到剪切板',
+      message: copySuccessText,
       position: 'is-bottom',
       type: 'is-success',
     });
@@ -265,9 +266,10 @@ export default class App extends Vue {
 
   private onCopyError() {
     App.selectText(this.$refs.passwordText as Element);
+    const copyErrorText = this.text.get('copyError') as string;
     this.$buefy.toast.open({
       duration: 3000,
-      message: '自动复制失败，请手动复制',
+      message: 'copyErrorText',
       position: 'is-bottom',
       type: 'is-danger',
     });

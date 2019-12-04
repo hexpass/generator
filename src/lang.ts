@@ -13,6 +13,8 @@ export default class Language {
     ['symbol', '符号'],
     ['avoidAmbChar', '排除易混淆'],
     ['generate', '生成'],
+    ['copySuccess', '已复制到剪切板'],
+    ['copyError', '自动复制失败，请手动复制'],
   ]);
 
   private hant: Map<string, string> = new Map([
@@ -26,6 +28,8 @@ export default class Language {
     ['symbol', '符號'],
     ['avoidAmbChar', '排除易混淆'],
     ['generate', '生成'],
+    ['copySuccess', '已複製到剪切板'],
+    ['copyError', '自動複製失敗，請手動複製'],
   ]);
 
   constructor(locale: string) {
