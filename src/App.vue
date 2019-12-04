@@ -45,21 +45,21 @@
             <b-field>
               <b-slider :min="4" :max="32" v-model="length" rounded />
             </b-field>
-            <label class="label is-small">字符</label>
+            <label class="label is-small">{{text.get('structure')}}</label>
             <b-field>
-              <b-checkbox v-model="hasLowerCase" @input="verify">小写字母</b-checkbox>
+              <b-checkbox v-model="hasLowerCase" @input="verify">{{text.get('lowercase')}}</b-checkbox>
             </b-field>
             <b-field>
-              <b-checkbox v-model="hasUpperCase" @input="verify">大写字母</b-checkbox>
+              <b-checkbox v-model="hasUpperCase" @input="verify">{{text.get('uppercase')}}</b-checkbox>
             </b-field>
             <b-field>
-              <b-checkbox v-model="hasNumber" @input="verify">数字</b-checkbox>
+              <b-checkbox v-model="hasNumber" @input="verify">{{text.get('number')}}</b-checkbox>
             </b-field>
             <b-field>
-              <b-checkbox v-model="hasSymbol" @input="verify">符号</b-checkbox>
+              <b-checkbox v-model="hasSymbol" @input="verify">{{text.get('symbol')}}</b-checkbox>
             </b-field>
             <b-field>
-              <b-checkbox v-model="avoidAmbChar">排除易混淆</b-checkbox>
+              <b-checkbox v-model="avoidAmbChar">{{text.get('avoidAmbChar')}}</b-checkbox>
             </b-field>
           </div>
         </b-collapse>
@@ -72,7 +72,7 @@
             v-clipboard:copy="password"
             v-clipboard:success="onCopySuccess"
             v-clipboard:error="onCopyError"
-          >生成</b-button>
+          >{{text.get('generate')}}</b-button>
         </div>
         <b-message v-show="passwordSuccess">
           <nav class="level column">
