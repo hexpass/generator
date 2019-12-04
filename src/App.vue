@@ -4,6 +4,7 @@
       <div class="column is-one-third">
         <b-dropdown v-model="languageSelect" aria-role="list">
           <b-button class="language-btn" type="is-light" slot="trigger" icon-right="translate" />
+          <b-dropdown-item :value="'en'" aria-role="listitem">English</b-dropdown-item>
           <b-dropdown-item :value="'zh-Hans'" aria-role="listitem">简体中文</b-dropdown-item>
           <b-dropdown-item :value="'zh-Hant'" aria-role="listitem">繁體中文</b-dropdown-item>
         </b-dropdown>

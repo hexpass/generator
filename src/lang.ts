@@ -1,6 +1,22 @@
 export default class Language {
   public locale: string = 'zh-Hans';
   public text: Map<string, string> = new Map();
+
+  private en: Map<string, string> = new Map([
+    ['label', 'Label'],
+    ['password', 'Password'],
+    ['advanced', 'Advanced'],
+    ['length', 'Length'],
+    ['lowercase', 'Lowercase'],
+    ['uppercase', 'Uppercase'],
+    ['number', 'Number'],
+    ['symbol', 'Symbol'],
+    ['avoidAmbChar', 'Avoid ambiguous characters'],
+    ['generate', 'Generate'],
+    ['copySuccess', 'Copied to clipboard'],
+    ['copyError', 'Automatic copy failed, please copy manually'],
+  ]);
+
   public hans: Map<string, string> = new Map([
     ['label', '标签'],
     ['password', '密码'],
@@ -46,6 +62,9 @@ export default class Language {
     let value!: string | undefined;
     for (const key of this.hans.keys()) {
       switch (this.locale) {
+        case 'en':
+          value = this.en.get(key);
+          break;
         case 'zh-Hans':
           value = this.hans.get(key);
           break;
