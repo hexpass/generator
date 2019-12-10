@@ -16,3 +16,8 @@ This project uses node and npm. Go check them out if you don't have them locally
 npm install
 npm run serve
 ```
+## To Do
+- [ ] Reduce bundle size
+- [ ] Support PWA
+- [ ] Dark mode and theme settings
+- [ ] Support command line
