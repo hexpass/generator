@@ -7,6 +7,7 @@ export default class Language {
     ['password', 'Password'],
     ['advanced', 'Advanced'],
     ['length', 'Length'],
+    ['structure', 'Structure'],
     ['lowercase', 'Lowercase'],
     ['uppercase', 'Uppercase'],
     ['number', 'Number'],
