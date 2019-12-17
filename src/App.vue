@@ -180,9 +180,9 @@ export default class App extends Vue {
 
       if (index < this.symbolNum) {
         char = App.getChar(this.symbolCharsArray, itemInt);
-      } else if (index < this.numberNum) {
+      } else if (index < this.symbolNum + this.numberNum) {
         char = App.getChar(this.numberCharsArray, itemInt);
-      } else if (index < this.upperCaseNum) {
+      } else if (index < this.length - this.lowerCaseNum) {
         char = App.getChar(this.upperCaseCharsArray, itemInt);
       } else {
         char = App.getChar(this.lowerCaseCharsArray, itemInt);
@@ -244,10 +244,6 @@ export default class App extends Vue {
     if (this.hasLowerCase) {
       this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
     }
-    console.log(this.symbolNum);
-    console.log(this.numberNum);
-    console.log(this.upperCaseNum);
-    console.log(this.lowerCaseNum);
   }
 
   public static getChar(charsArray: string[], index: number): string {
