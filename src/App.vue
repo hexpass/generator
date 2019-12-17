@@ -187,7 +187,7 @@ export default class App extends Vue {
       } else {
         char = App.getChar(this.lowerCaseCharsArray, itemInt);
       }
-      passwordArray[index] = char;
+      passwordArray[cursor] = char;
     });
 
     this.password = passwordArray.join('');
