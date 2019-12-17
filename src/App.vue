@@ -88,7 +88,8 @@
 </template>
 <script lang='ts'>
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import md5 from 'js-md5';
+import MD5 from 'crypto-js/md5';
+import HmacMD5 from 'crypto-js/hmac-md5';
 import Language from './lang';
 import GithubCorner from './components/GithubCorner.vue';
 @Component({
@@ -153,9 +154,11 @@ export default class App extends Vue {
   }
 
   private generate() {
-    const tagMd5: string = md5(this.tag);
-    const pwdMd5: string = md5(this.pwd);
-    const tagAndPwdMd5Array: string[] = md5(tagMd5 + pwdMd5).split('');
+    const tagMd5: string = MD5(this.tag).toString();
+    const pwdMd5: string = MD5(this.pwd).toString();
+    const tagAndPwdMd5Array: string[] = HmacMD5(tagMd5, pwdMd5)
+      .toString()
+      .split('');
     const passwordMd5Array: string[] = tagAndPwdMd5Array.splice(0, this.length);
     const passwordArray: string[] = new Array(this.length);
 
@@ -236,6 +239,10 @@ export default class App extends Vue {
     if (this.hasLowerCase) {
       this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
     }
+    console.log(this.symbolNum);
+    console.log(this.numberNum);
+    console.log(this.upperCaseNum);
+    console.log(this.lowerCaseNum);
   }
 
   public static getChar(charsArray: string[], index: number): string {

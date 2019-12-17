@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "@mdi/font": "^4.6.95",
+    "@types/crypto-js": "^3.1.43",
     "buefy": "^0.8.8",
     "core-js": "^3.4.3",
-    "js-md5": "^0.7.3",
+    "crypto-js": "^3.1.9-1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
