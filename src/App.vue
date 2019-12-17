@@ -219,6 +219,11 @@ export default class App extends Vue {
   }
 
   private getEachTypeCharsNum() {
+    this.symbolNum = 0;
+    this.numberNum = 0;
+    this.upperCaseNum = 0;
+    this.lowerCaseNum = 0;
+
     if (this.hasSymbol) {
       this.symbolNum = Math.floor(this.length / this.characterTypeNum);
     }
