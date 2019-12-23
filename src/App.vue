@@ -3,7 +3,9 @@
     <div class="columns is-mobile is-gapless">
       <div class="column is-one-third">
         <b-dropdown v-model="languageSelect" aria-role="list">
-          <b-button class="language-btn" type="is-light" slot="trigger" icon-right="translate" />
+          <button class="language-btn button is-light" slot="trigger">
+            <icon :path="mdiTranslate" />
+          </button>
           <b-dropdown-item :value="'en'" aria-role="listitem">English</b-dropdown-item>
           <b-dropdown-item :value="'zh-Hans'" aria-role="listitem">简体中文</b-dropdown-item>
           <b-dropdown-item :value="'zh-Hant'" aria-role="listitem">繁體中文</b-dropdown-item>
@@ -20,48 +22,66 @@
     </div>
     <div class="columns is-centered is-gapless app-body">
       <div class="column is-one-third">
-        <b-field :label="text.get('label')">
-          <b-input icon="tag" v-model="tag" @input="verify" />
-        </b-field>
-        <b-field :label="text.get('password')">
-          <b-input
-            type="password"
-            icon="textbox-password"
-            password-reveal
-            v-model="pwd"
-            @input="verify"
-          />
-        </b-field>
+        <div class="field">
+          <label class="label">{{text.get('label')}}</label>
+          <p class="control has-icons-left">
+            <input class="input" v-model="tag" @input="verify" />
+            <icon :path="mdiTag" class="is-left" />
+          </p>
+        </div>
+        <div class="field">
+          <label class="label">{{text.get('password')}}</label>
+          <p class="control has-icons-left has-icons-right">
+            <input
+              ref="inputPassword"
+              class="input"
+              :type="passwordInputType"
+              password-reveal
+              v-model="pwd"
+              @input="verify"
+            />
+            <icon :path="mdiTextboxPassword" class="is-left" />
+            <icon
+              id="password-eye"
+              :path="iconEye"
+              class="is-right is-clickable"
+              @click.native="togglePasswordVisibility"
+            />
+          </p>
+        </div>
         <b-collapse :open="false" class="card" aria-id="advanced">
           <template #trigger="triggerStatus">
             <div class="card-header" role="button" aria-controls="advanced">
               <p class="card-header-title">{{text.get('advanced')}}</p>
               <a class="card-header-icon">
-                <b-icon type="is-primary" :icon="triggerStatus.open ? 'menu-down' : 'menu-left'" />
+                <icon
+                  class="has-text-primary"
+                  :path="triggerStatus.open ? mdiMenuDown : mdiMenuLeft"
+                />
               </a>
             </div>
           </template>
           <div class="card-content">
             <label class="label is-small">{{text.get('length')}}</label>
-            <b-field>
+            <div class="field">
               <b-slider :min="4" :max="32" v-model="length" rounded />
-            </b-field>
+            </div>
             <label class="label is-small">{{text.get('structure')}}</label>
-            <b-field>
+            <div class="field">
               <b-checkbox v-model="hasLowerCase" @input="verify">{{text.get('lowercase')}}</b-checkbox>
-            </b-field>
-            <b-field>
+            </div>
+            <div class="field">
               <b-checkbox v-model="hasUpperCase" @input="verify">{{text.get('uppercase')}}</b-checkbox>
-            </b-field>
-            <b-field>
+            </div>
+            <div class="field">
               <b-checkbox v-model="hasNumber" @input="verify">{{text.get('number')}}</b-checkbox>
-            </b-field>
-            <b-field>
+            </div>
+            <div class="field">
               <b-checkbox v-model="hasSymbol" @input="verify">{{text.get('symbol')}}</b-checkbox>
-            </b-field>
-            <b-field>
+            </div>
+            <div class="field">
               <b-checkbox v-model="avoidAmbChar">{{text.get('avoidAmbChar')}}</b-checkbox>
-            </b-field>
+            </div>
           </div>
         </b-collapse>
         <div class="generate-btn">
@@ -90,14 +110,34 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import MD5 from 'crypto-js/md5';
 import HmacMD5 from 'crypto-js/hmac-md5';
+import {
+  mdiTranslate,
+  mdiTag,
+  mdiTextboxPassword,
+  mdiEye,
+  mdiEyeOff,
+  mdiMenuDown,
+  mdiMenuLeft,
+} from '@mdi/js';
 import Language from './lang';
 import GithubCorner from './components/GithubCorner.vue';
+import Icon from './components/Icon.vue';
 @Component({
   components: {
     GithubCorner,
+    Icon,
   },
 })
 export default class App extends Vue {
+  private mdiTranslate: string = mdiTranslate;
+  private mdiTag: string = mdiTag;
+  private mdiTextboxPassword: string = mdiTextboxPassword;
+  private iconEye: string = mdiEye;
+  private mdiMenuDown: string = mdiMenuDown;
+  private mdiMenuLeft: string = mdiMenuLeft;
+
+  private isPasswordVisible: boolean = false;
+  private passwordInputType: string = 'text';
   private lang: Language = new Language('zh-Hans');
   private tag: string = '';
   private pwd: string = '';
@@ -283,6 +323,15 @@ export default class App extends Vue {
       type: 'is-danger',
     });
   }
+
+  private togglePasswordVisibility() {
+    this.isPasswordVisible = !this.isPasswordVisible;
+    this.passwordInputType = this.isPasswordVisible ? 'text' : 'password';
+    this.iconEye = this.isPasswordVisible ? mdiEyeOff : mdiEye;
+    this.$nextTick(() => {
+      (this.$refs.inputPassword as HTMLInputElement).focus();
+    });
+  }
 }
 </script>
 <style>
@@ -299,5 +348,8 @@ export default class App extends Vue {
 }
 .wrap-p {
   word-break: break-all;
+}
+#password-eye {
+  pointer-events: visible;
 }
 </style>
