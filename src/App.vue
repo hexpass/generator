@@ -85,23 +85,24 @@
           </div>
         </b-collapse>
         <div class="generate-btn">
-          <b-button
-            type="is-primary"
-            class="is-centered"
+          <button
+            class="button is-centered is-primary"
             :disabled="btnDisabled"
             @click="generate"
             v-clipboard:copy="password"
             v-clipboard:success="onCopySuccess"
             v-clipboard:error="onCopyError"
-          >{{text.get('generate')}}</b-button>
+          >{{text.get('generate')}}</button>
         </div>
-        <b-message v-show="passwordSuccess">
-          <nav class="level column">
-            <p class="level-item title wrap-p" ref="passwordText">
-              <strong>{{password}}</strong>
-            </p>
-          </nav>
-        </b-message>
+        <article class="message" v-show="passwordSuccess">
+          <div class="message-body">
+            <nav class="level column">
+              <p class="level-item title wrap-p" ref="passwordText">
+                <strong>{{password}}</strong>
+              </p>
+            </nav>
+          </div>
+        </article>
       </div>
     </div>
   </div>
