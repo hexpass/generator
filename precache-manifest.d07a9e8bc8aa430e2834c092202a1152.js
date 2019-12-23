@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "16ecd93c74f5ff7bc60a",
+    "revision": "b11b5c56eb91db1db0da",
     "url": "/HexPass/css/app.1d171c78.css"
   },
   {
@@ -8,19 +8,23 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/HexPass/img/logo.a0ccb8d4.png"
   },
   {
-    "revision": "6a9c8701051175ff4c1603e3001d923f",
+    "revision": "57e28a01b11493e56dc0410aeb6b35dc",
     "url": "/HexPass/index.html"
   },
   {
-    "revision": "16ecd93c74f5ff7bc60a",
-    "url": "/HexPass/js/app-legacy.e1c0083c.js"
+    "revision": "b11b5c56eb91db1db0da",
+    "url": "/HexPass/js/app.a2b2e8b0.js"
   },
   {
-    "revision": "afeb01592278ca9abec7",
-    "url": "/HexPass/js/chunk-vendors-legacy.df7f4f2d.js"
+    "revision": "4d82aa905762eef10b44",
+    "url": "/HexPass/js/chunk-vendors.d8098941.js"
   },
   {
     "revision": "1059e125c7cf73985bf49aa9714d4b59",
     "url": "/HexPass/manifest.json"
+  },
+  {
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/HexPass/robots.txt"
   }
 ]);
