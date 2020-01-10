@@ -97,7 +97,7 @@
         <article class="message" v-show="passwordSuccess">
           <div class="message-body">
             <nav class="level column">
-              <p class="level-item title wrap-p" ref="passwordText">
+              <p id="password-text" class="level-item title" ref="passwordText">
                 <strong>{{password}}</strong>
               </p>
             </nav>
@@ -261,8 +261,8 @@ export default class App extends Vue {
   justify-content: center;
   margin: 1rem;
 }
-.wrap-p {
-  word-break: break-all;
+#password-text {
+  font-family: 'Fira Code', Menlo, Consolas, Monaco, 'Courier New', 'DejaVu Sans Mono';
 }
 #password-eye {
   pointer-events: visible;
