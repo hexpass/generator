@@ -64,7 +64,7 @@
           <div class="card-content">
             <label class="label is-small">{{text.get('length')}}</label>
             <div class="field">
-              <b-slider :min="4" :max="32" v-model="length" rounded />
+              <b-slider :min="4" :max="32" v-model="length" @input="verify" rounded />
             </div>
             <label class="label is-small">{{text.get('structure')}}</label>
             <div class="field">
@@ -109,8 +109,6 @@
 </template>
 <script lang='ts'>
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import MD5 from 'crypto-js/md5';
-import HmacMD5 from 'crypto-js/hmac-md5';
 import {
   mdiTranslate,
   mdiTag,
@@ -120,7 +118,9 @@ import {
   mdiMenuDown,
   mdiMenuLeft,
 } from '@mdi/js';
-import Language from './lang';
+import Language from './Language';
+import PasswordParams from './PasswordParams';
+import GenerateUitl from './GenerateUitl';
 import GithubCorner from './components/GithubCorner.vue';
 import Icon from './components/Icon.vue';
 @Component({
@@ -142,27 +142,20 @@ export default class App extends Vue {
   private lang: Language = new Language('zh-Hans');
   private tag: string = '';
   private pwd: string = '';
+  private version: number = 1;
   private length: number = 10;
   private hasSymbol: boolean = false;
   private hasNumber: boolean = true;
   private hasUpperCase: boolean = true;
   private hasLowerCase: boolean = true;
-  private characterTypeNum: number = 3;
+  private avoidAmbChar: boolean = false;
   private password: string = '';
   private btnDisabled: boolean = true;
   private passwordSuccess: boolean = false;
-  private avoidAmbChar: boolean = false;
-  private symbolNum: number = 0;
-  private numberNum: number = 0;
-  private upperCaseNum: number = 0;
-  private lowerCaseNum: number = 0;
-  private symbolCharsArray: string[] = [];
-  private numberCharsArray: string[] = [];
-  private upperCaseCharsArray: string[] = [];
-  private lowerCaseCharsArray: string[] = [];
   private isModalActive: boolean = false;
   private languageSelect: string = 'zh-Hans';
-  public text: Map<string, string> = new Map();
+  private text: Map<string, string> = new Map();
+  private params?: PasswordParams;
 
   created() {
     this.changeString();
@@ -185,8 +178,22 @@ export default class App extends Vue {
   }
 
   private verify() {
-    this.characterTypeNum = this.getCharacterTypeNum();
-    if (this.tag.length != 0 && this.pwd.length != 0 && this.characterTypeNum != 0) {
+    this.params = {
+      tag: this.tag,
+      pwd: this.pwd,
+      version: this.version,
+      length: this.length,
+      hasSymbol: this.hasSymbol,
+      hasNumber: this.hasNumber,
+      hasUpperCase: this.hasUpperCase,
+      hasLowerCase: this.hasLowerCase,
+      avoidAmbChar: this.avoidAmbChar,
+    };
+    if (
+      this.tag.length != 0 &&
+      this.pwd.length != 0 &&
+      GenerateUitl.getCharacterTypeNum(this.params) != 0
+    ) {
       this.btnDisabled = false;
     } else {
       this.btnDisabled = true;
@@ -195,103 +202,10 @@ export default class App extends Vue {
   }
 
   private generate() {
-    const tagMd5: string = MD5(this.tag).toString();
-    const pwdMd5: string = MD5(this.pwd).toString();
-    const tagAndPwdMd5Array: string[] = HmacMD5(tagMd5, pwdMd5)
-      .toString()
-      .split('');
-    const passwordMd5Array: string[] = tagAndPwdMd5Array.splice(0, this.length);
-    const passwordArray: string[] = new Array(this.length);
-
-    this.getEachTypeCharsNum();
-    this.initChars();
-
-    passwordMd5Array.forEach((value, index) => {
-      const itemInt: number = parseInt(value, 16);
-      let char: string = '';
-      let cursor: number = 0;
-      for (let i = 0; i <= itemInt; i++) {
-        if (passwordArray[cursor] != undefined) {
-          i--;
-        }
-        if (i != itemInt) {
-          cursor = cursor == this.length - 1 ? 0 : cursor + 1;
-        }
-      }
-
-      if (index < this.symbolNum) {
-        char = App.getChar(this.symbolCharsArray, itemInt);
-      } else if (index < this.symbolNum + this.numberNum) {
-        char = App.getChar(this.numberCharsArray, itemInt);
-      } else if (index < this.length - this.lowerCaseNum) {
-        char = App.getChar(this.upperCaseCharsArray, itemInt);
-      } else {
-        char = App.getChar(this.lowerCaseCharsArray, itemInt);
-      }
-      passwordArray[cursor] = char;
-    });
-
-    this.password = passwordArray.join('');
-    this.passwordSuccess = true;
-  }
-
-  private initChars() {
-    if (this.avoidAmbChar) {
-      this.symbolCharsArray = '@#$%^&*+-'.split('');
-      this.numberCharsArray = '23456789'.split('');
-      this.upperCaseCharsArray = 'ABDEFGHJLMNQRTY'.split('');
-      this.lowerCaseCharsArray = 'abdefghjmnqrty'.split('');
-    } else {
-      this.symbolCharsArray = '!@#$%^&*+-'.split('');
-      this.numberCharsArray = '0123456789'.split('');
-      this.upperCaseCharsArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      this.lowerCaseCharsArray = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    if (this.params != undefined) {
+      this.password = GenerateUitl.generate(this.params);
+      this.passwordSuccess = true;
     }
-  }
-
-  private getCharacterTypeNum(): number {
-    const characterTypes: boolean[] = [
-      this.hasSymbol,
-      this.hasNumber,
-      this.hasUpperCase,
-      this.hasLowerCase,
-    ];
-    return characterTypes.reduce((total, element) => (element ? total + 1 : total), 0);
-  }
-
-  private getEachTypeCharsNum() {
-    this.symbolNum = 0;
-    this.numberNum = 0;
-    this.upperCaseNum = 0;
-    this.lowerCaseNum = 0;
-
-    if (this.hasSymbol) {
-      this.symbolNum = Math.floor(this.length / this.characterTypeNum);
-    }
-    if (this.hasNumber) {
-      if (!(this.hasUpperCase || this.hasLowerCase)) {
-        this.numberNum = this.length - this.symbolNum;
-      } else {
-        this.numberNum = Math.floor(this.length / this.characterTypeNum);
-      }
-    }
-    if (this.hasUpperCase) {
-      if (!this.hasLowerCase) {
-        this.upperCaseNum = this.length - this.symbolNum - this.numberNum;
-      } else {
-        this.upperCaseNum = Math.floor((this.length - this.symbolNum - this.numberNum) / 2);
-      }
-    }
-    if (this.hasLowerCase) {
-      this.lowerCaseNum = this.length - this.symbolNum - this.numberNum - this.upperCaseNum;
-    }
-  }
-
-  public static getChar(charsArray: string[], index: number): string {
-    if (index < charsArray.length) {
-      return charsArray[index];
-    }
-    return charsArray[index % charsArray.length];
   }
 
   public static selectText(element: Element) {
