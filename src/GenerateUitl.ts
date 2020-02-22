@@ -1,5 +1,5 @@
-import MD5 from 'crypto-js/md5';
-import HmacMD5 from 'crypto-js/hmac-md5';
+import sha512 from 'crypto-js/sha512';
+import hmacSHA512 from 'crypto-js/hmac-sha512';
 import PasswordParams from './PasswordParams';
 
 export default class GenerateUitl {
@@ -15,20 +15,19 @@ export default class GenerateUitl {
   private static lowerCaseCharsArray: string[] = [];
 
   public static generate(params: PasswordParams): string {
-    const tagMd5: string = MD5(params.tag).toString();
-    const pwdMd5: string = MD5(params.pwd).toString();
-    const versionMd5: string = MD5(params.version.toString()).toString();
-    const seedArray: string[] = HmacMD5(tagMd5 + versionMd5, pwdMd5)
+    const tagHash: string = sha512(params.tag).toString();
+    const pwdHash: string = sha512(params.pwd).toString();
+    const versionHash: string = sha512(params.version.toString()).toString();
+    const seedArray: string[] = hmacSHA512(tagHash + versionHash, pwdHash)
       .toString()
       .split('');
-    const passwordMd5Array: string[] = seedArray.splice(0, params.length);
+    const passwordHashArray: string[] = seedArray.splice(parseInt(seedArray[0], 16), params.length);
     const passwordArray: string[] = new Array(params.length);
-
     this.initVariable();
     this.getEachTypeCharsNum(params);
     this.initChars(params.avoidAmbChar);
 
-    passwordMd5Array.forEach((value, index) => {
+    passwordHashArray.forEach((value, index) => {
       const itemInt: number = parseInt(value, 16);
       let char: string = '';
       let cursor: number = 0;
