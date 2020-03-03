@@ -162,11 +162,16 @@ export default class App extends Vue {
   private params?: PasswordParams;
 
   created() {
+    const languageNow = localStorage.getItem('language');
+    if (languageNow != null) {
+      this.languageSelect = languageNow;
+    }
     this.changeString();
   }
 
   @Watch('languageSelect')
   languageChanged() {
+    localStorage.setItem('language', this.languageSelect);
     this.lang.setLocale(this.languageSelect);
     this.changeString();
     this.$forceUpdate();
