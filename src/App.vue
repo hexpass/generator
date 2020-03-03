@@ -66,6 +66,10 @@
             <div class="field">
               <b-slider :min="4" :max="32" v-model="length" @input="verify" rounded />
             </div>
+            <label class="label is-small">{{text.get('version')}}</label>
+            <div class="field">
+              <b-slider :min="1" :max="8" v-model="version" @input="verify" rounded />
+            </div>
             <label class="label is-small">{{text.get('structure')}}</label>
             <div class="field">
               <b-checkbox v-model="hasLowerCase" @input="verify">{{text.get('lowercase')}}</b-checkbox>
