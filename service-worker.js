@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/HexPass/precache-manifest.997704c7a1c9b2a292dffe276362a204.js"
+  "/HexPass/precache-manifest.aee7735ef0288e993090a3b5254cc875.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "hexpass"});
