@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ad2d395d04d2c2a7aeb4",
+    "revision": "3d19b46ed1b46a2aa1e6",
     "url": "/HexPass/css/app.6220b97e.css"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/HexPass/img/logo.a0ccb8d4.png"
   },
   {
-    "revision": "ecf5d5d6f322d6fb09e8d6b45f809d13",
+    "revision": "5908fc44936fb5068723b5063c99c740",
     "url": "/HexPass/index.html"
   },
   {
-    "revision": "ad2d395d04d2c2a7aeb4",
-    "url": "/HexPass/js/app-legacy.7fd015e7.js"
+    "revision": "3d19b46ed1b46a2aa1e6",
+    "url": "/HexPass/js/app-legacy.64a228fe.js"
   },
   {
     "revision": "b5b97aaee6320fbf288a",
