@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title>HexPass</title>
+  <script type="module">
+    import defaultLanguage from "./get-language.js"
+    document.documentElement.lang = defaultLanguage;
+  </script>
 </head>
 
 <body>

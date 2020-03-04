@@ -125,6 +125,7 @@ import {
 import Language from './Language';
 import PasswordParams from './PasswordParams';
 import GenerateUitl from './GenerateUitl';
+import defaultLanguage from '../public/get-language';
 import GithubCorner from './components/GithubCorner.vue';
 import Icon from './components/Icon.vue';
 @Component({
@@ -143,7 +144,7 @@ export default class App extends Vue {
 
   private isPasswordVisible: boolean = false;
   private passwordInputType: string = 'text';
-  private lang: Language = new Language('zh-Hans');
+  private lang: Language = new Language('en');
   private tag: string = '';
   private pwd: string = '';
   private version: number = 1;
@@ -157,27 +158,26 @@ export default class App extends Vue {
   private btnDisabled: boolean = true;
   private passwordSuccess: boolean = false;
   private isModalActive: boolean = false;
-  private languageSelect: string = 'zh-Hans';
+  private languageSelect: string = 'en';
   private text: Map<string, string> = new Map();
   private params?: PasswordParams;
 
   created() {
-    const languageNow = localStorage.getItem('language');
-    if (languageNow != null) {
-      this.languageSelect = languageNow;
+    if (typeof defaultLanguage == 'string') {
+      this.languageSelect = defaultLanguage;
     }
     this.changeString();
   }
 
   @Watch('languageSelect')
   languageChanged() {
-    localStorage.setItem('language', this.languageSelect);
-    this.lang.setLocale(this.languageSelect);
     this.changeString();
     this.$forceUpdate();
   }
 
   private changeString() {
+    this.lang.setLocale(this.languageSelect);
+    localStorage.setItem('language', this.languageSelect);
     for (const key of this.lang.hans.keys()) {
       const value = this.lang.text.get(key);
       if (typeof value == 'string') {
