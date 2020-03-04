@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/HexPass/img/logo.a0ccb8d4.png"
   },
   {
-    "revision": "684567c849e04af151654d934e96967c",
+    "revision": "58496fb9b6e60eebd3422f7a0d2617c2",
     "url": "/HexPass/index.html"
   },
   {
