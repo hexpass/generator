@@ -1,4 +1,4 @@
-importScripts("/generator/precache-manifest.0d194ded21012c6ce806279f23a0d863.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+importScripts("/generator/precache-manifest.4cdc802fb6b4e4fc86803bfac8505e15.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 workbox.core.skipWaiting(); // 强制等待中的 Service Worker 被激活
 workbox.core.clientsClaim(); // Service Worker 被激活后使其立即获得页面控制权
