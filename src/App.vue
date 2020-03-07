@@ -17,7 +17,7 @@
         </figure>
       </div>
       <div class="column is-one-third">
-        <github-corner url="https://github.com/Petrichor/HexPass" />
+        <github-corner url="https://github.com/hexpass/generator" />
       </div>
     </div>
     <div class="columns is-centered is-gapless app-body">
