@@ -17,6 +17,6 @@ npm install
 npm run serve
 ```
 ## 待做
-- [*] 减小包体积
-- [*] 支持PWA
+- [x] 减小包体积
+- [x] 支持PWA
 - [ ] 黑暗模式和主题设置

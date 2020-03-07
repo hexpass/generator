@@ -17,6 +17,6 @@ npm install
 npm run serve
 ```
 ## To Do
-- [*] Reduce bundle size
-- [*] Support PWA
+- [x] Reduce bundle size
+- [x] Support PWA
 - [ ] Dark mode and theme settings
