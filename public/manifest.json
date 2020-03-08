@@ -1,6 +1,6 @@
 {
-  "name": "HexPass",
-  "short_name": "HexPass",
+  "name": "HexPass Generator",
+  "short_name": "HexPass Generator",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
