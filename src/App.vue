@@ -3,7 +3,7 @@
     <div class="columns is-mobile is-gapless">
       <div class="column is-one-third">
         <b-dropdown v-model="languageSelect" aria-role="list">
-          <button class="language-btn button is-light" slot="trigger">
+          <button id="language-btn" class="button is-light" type="button" slot="trigger">
             <icon :path="mdiTranslate" />
           </button>
           <b-dropdown-item :value="'en'" aria-role="listitem">English</b-dropdown-item>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="columns is-centered is-gapless app-body">
-      <div class="column is-one-third">
+      <div class="column is-one-third" @keyup.enter="generate">
         <div class="field">
           <label class="label">{{text.get('label')}}</label>
           <p class="control has-icons-left">
@@ -88,14 +88,12 @@
             </div>
           </div>
         </b-collapse>
-        <div class="generate-btn">
+        <div id="generate-btn-div">
           <button
             class="button is-centered is-primary"
+            type="button"
             :disabled="btnDisabled"
             @click="generate"
-            v-clipboard:copy="password"
-            v-clipboard:success="onCopySuccess"
-            v-clipboard:error="onCopyError"
           >{{text.get('generate')}}</button>
         </div>
         <article class="message" v-show="passwordSuccess">
@@ -186,7 +184,7 @@ export default class App extends Vue {
     }
   }
 
-  private verify() {
+  private verify(): boolean {
     this.params = {
       tag: this.tag,
       pwd: this.pwd,
@@ -204,16 +202,27 @@ export default class App extends Vue {
       GenerateUitl.getCharacterTypeNum(this.params) != 0
     ) {
       this.btnDisabled = false;
-    } else {
-      this.btnDisabled = true;
-      this.passwordSuccess = false;
+      return true;
     }
+    this.btnDisabled = true;
+    this.passwordSuccess = false;
+    return false;
   }
 
   private generate() {
-    if (this.params != undefined) {
-      this.password = GenerateUitl.generate(this.params);
-      this.passwordSuccess = true;
+    if (this.verify()) {
+      if (this.params != undefined) {
+        this.password = GenerateUitl.generate(this.params);
+        this.passwordSuccess = true;
+      }
+      this.$copyText(this.password).then(
+        successEvent => {
+          this.onCopySuccess();
+        },
+        errorEvent => {
+          this.onCopyError();
+        },
+      );
     }
   }
 
@@ -259,13 +268,13 @@ export default class App extends Vue {
 }
 </script>
 <style>
-.language-btn {
+#language-btn {
   margin: 0.75rem;
 }
 .app-body {
   padding: 0.75rem;
 }
-.generate-btn {
+#generate-btn-div {
   display: flex;
   justify-content: center;
   margin: 1rem;

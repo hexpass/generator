@@ -3,9 +3,9 @@
 English | [简体中文](./README.zh-CN.md)
 
 ## Introduction
-HexPass generator is a **Memoryable** secure password generator.
+HexPass Generator is a **Memoryable** secure password generator.
 
-HexPass generator uses the local browser to generate passwords. Without web server , you can disconnect the network to use. It does not store and send any password information.
+HexPass Generator uses the local browser to generate passwords. Without web server , you can disconnect the network to use. It does not store and send any password information.
 
 ## Usage
 You can use the [Online App](https://hexpass.github.io/generator/) deployed on GitHub Pages. If you like self-hosting, you can build it yourself.
