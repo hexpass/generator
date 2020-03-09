@@ -141,7 +141,7 @@ export default class App extends Vue {
   private mdiMenuLeft: string = mdiMenuLeft;
 
   private isPasswordVisible: boolean = false;
-  private passwordInputType: string = 'text';
+  private passwordInputType: string = 'password';
   private lang: Language = new Language('en');
   private tag: string = '';
   private pwd: string = '';
