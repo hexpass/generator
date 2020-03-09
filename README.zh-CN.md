@@ -1,5 +1,7 @@
 <p align="center"><a href="https://hexpass.github.io/generator/" target="_blank" rel="noopener noreferrer"><img width="100" src="src/assets/logo.png" alt="HexPass logo"></a></p>
 
+![Build and Deploy](https://github.com/hexpass/generator/workflows/Build%20and%20Deploy/badge.svg)
+
 [English](./README.md) | 简体中文
 
 ## 介绍
